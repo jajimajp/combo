@@ -2,7 +2,9 @@
   "name": "combo",
   "version": "1.0.0",
   "description": "A tool for effortlessly changing the current directory",
-  "main": "index.js",
+  "bin": {
+    "combo": "index.js"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
