@@ -1,11 +1,10 @@
 #!/usr/bin/env node
 
+const { lookpath } = require('lookpath')
+const { spawn } = require('node:child_process')
 const log = console.log
 
 const main = async () => {
-  const { lookpath } = require('lookpath')
-  log('Combo version 1.0.0')
-
   const peco = await lookpath('peco')
   if (peco === undefined) {
     log('peco does not found. Check if peco is installed and added to $PATH.')
@@ -13,6 +12,8 @@ const main = async () => {
   } else {
     log('use peco at', peco)
   }
+  const child = spawn('peco', ['--version'])
+  child.stdout.on('data', d => log(d.toString()))
 }
 
 main()
