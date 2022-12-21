@@ -27,16 +27,13 @@ const loop = () => {
   fs.readdir(cwd, { withFileTypes: true }, (err, files) => {
     if (err) { process.exit(1) }
     else {
-      const dirs = files
-                      .filter(f => f.isDirectory())
-                      .map(f => f.name)
-      if (dirs.length === 0) {
-        log(cwd)
-        process.exit(0)
-      }
-      else {
-        dirs.forEach(i => child.stdin.write(`${i}\n`))
-      }
+      ['..'] // move parent directory
+        .concat(
+          files
+            .filter(f => f.isDirectory())
+            .map(f => f.name)
+        )
+        .forEach(i => child.stdin.write(`${i}\n`))
     }
   })
 }
