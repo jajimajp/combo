@@ -13,7 +13,7 @@ const loop = () => {
   child.stdout.on('data', d => nextPath = d.toString().trim())
   child.on('exit', () => {
     if (nextPath === '') {
-      log('exit')
+      log(cwd)
       process.exit(0)
     } else {
       try {
@@ -24,8 +24,21 @@ const loop = () => {
       loop()
     }
   })
-  const files = fs.readdirSync(cwd)
-  files.forEach(i => child.stdin.write(`${i}\n`))
+  fs.readdir(cwd, { withFileTypes: true }, (err, files) => {
+    if (err) { process.exit(1) }
+    else {
+      const dirs = files
+                      .filter(f => f.isDirectory())
+                      .map(f => f.name)
+      if (dirs.length === 0) {
+        log(cwd)
+        process.exit(0)
+      }
+      else {
+        dirs.forEach(i => child.stdin.write(`${i}\n`))
+      }
+    }
+  })
 }
 
 const main = async () => {
